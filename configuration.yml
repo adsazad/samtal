@@ -1,0 +1,6 @@
+nodename: arashdeep
+port: 8000
+proxies: 
+ Us: 
+  host: "asiatradedirectory.com"
+  port: 80
