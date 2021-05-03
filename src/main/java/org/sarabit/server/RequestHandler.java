@@ -3,23 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.sarabit.loader;
+package org.sarabit.server;
+
+import java.net.Socket;
 
 /**
  *
  * @author arashdeep
  */
-public class Proxie {
+public class RequestHandler {
 
-    public String host;
-    public int port;
+    public RequestHandler(Request request, Socket clientSocket) {
 
-    public String getHost() {
-        return this.host;
     }
-
-    public int getPort() {
-        return this.port;
-    }
-
 }

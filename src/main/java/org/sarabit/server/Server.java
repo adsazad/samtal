@@ -6,12 +6,17 @@
 package org.sarabit.server;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.sarabit.loader.Configuration;
+import org.sarabit.loader.ConfigurationLoader;
 
 /**
  *
@@ -31,13 +36,16 @@ public class Server implements Runnable {
     }
 
     public void run() {
-        while (true) {
-            try {
+        try {
+
+            while (true) {
                 Socket s = serverSocket.accept();
-                RequestReader request = new RequestReader(s.getInputStream());
-            } catch (IOException ex) {
-                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                Request request = new Request(s.getInputStream());
+                System.out.println(request.getMethod());
+//                RequestReader request = new RequestReader(s.getInputStream(), s.getOutputStream());
             }
+        } catch (IOException ex) {
+            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

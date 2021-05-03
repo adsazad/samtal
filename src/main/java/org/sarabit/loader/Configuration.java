@@ -17,13 +17,13 @@ public class Configuration {
 
     public String nodename;
     public int port;
-    public Map<String, Proxie> proxies = new HashMap<>();
+    public Map<String, Proxy> proxies = new HashMap<>();
 
     public String getNodename() {
         return this.nodename;
     }
 
-    public Map<String, Proxie> getProxies() {
+    public Map<String, Proxy> getProxies() {
         return this.proxies;
     }
 

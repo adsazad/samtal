@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.sarabit.loader.Proxie;
+import org.sarabit.loader.Proxy;
 import org.sarabit.server.Server;
 
 /**
@@ -22,19 +22,9 @@ import org.sarabit.server.Server;
 public class Main {
 
     public static void main(String[] args) {
-        ConfigurationLoader loader = new ConfigurationLoader();
-        try {
-           Configuration conf = loader.getConfiguration();
-           Map<String, Proxie> proxies = conf.getProxies();
-            for (Map.Entry<String, Proxie> en : proxies.entrySet()) {
-                Object key = en.getKey();
-                Proxie val = en.getValue();
-                System.err.println(val.host);
-            }
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        for (int i = 0; i < 100; i++) {
+            Thread server = new Thread(new Server(8000));
+            server.run();
         }
-        Thread server = new Thread(new Server(8000));
-        server.run();
     }
 }
