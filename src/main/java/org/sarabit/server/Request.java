@@ -24,6 +24,7 @@ public class Request {
     private String protocol;
     private Map<String, String> headers = new HashMap<>();
     private String request = "";
+    private String content = "";
 
     public Request(InputStream inputStream) throws IOException {
         InputStreamReader inStreamReader = new InputStreamReader(inputStream);
@@ -31,14 +32,35 @@ public class Request {
         Commons common = new Commons();
         String request = common.BufferReaderToString(inBufferedReader);
         this.request = request;
+        System.err.println(request);
         this.setMethod(common.extractRequestMethod(request));
         this.setPath(common.extractRequestPath(request));
         this.setProtocol(common.extractRequestProtocol(request));
         this.headers = common.getHeaders(request);
+        this.content = common.getHttpContent(request);
     }
 
     public String getRequest() {
-        return this.request;
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.getMethod() + " " + this.getPath() + " " + this.getProtocol() + "\r\n");
+        for (Map.Entry<String, String> h : headers.entrySet()) {
+            String key = h.getKey();
+            String val = h.getValue();
+            if (key == "Host") {
+                val = "demo.shopping.sarabit.com";
+            }
+            sb.append(key + ": " + val + "\r\n");
+        }
+        if (this.getContent().isEmpty()) {
+            sb.append("\r\n");
+            sb.append(this.getContent());
+        }
+        sb.append("\r\n");
+        return sb.toString();
+    }
+
+    public String getContent() {
+        return this.content;
     }
 
     public String getMethod() {

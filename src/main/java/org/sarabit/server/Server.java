@@ -47,11 +47,10 @@ public class Server implements Runnable {
                 System.err.println(i);
                 i++;
                 Request request = new Request(s.getInputStream());
-                s.close();
 //                RequestReader rr = new RequestReader(s.getInputStream(), s.getOutputStream());
-//                Runnable requestHandler = new RequestHandler(request, s);
-//                ExecutorService execs = Executors.newFixedThreadPool(5);
-//                execs.execute(requestHandler);
+                Runnable requestHandler = new RequestHandler(request, s);
+                ExecutorService execs = Executors.newFixedThreadPool(5);
+                execs.execute(requestHandler);
 //                System.out.println(requestHandler.sendRequest());
 //                System.out.println(request.getRequest());
 //                System.out.println(request.getMethod());

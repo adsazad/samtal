@@ -41,8 +41,8 @@ public class Commons {
         }
         return "";
     }
-//    Only for Request
 
+//    Only for Request
     public String extractRequestPath(String request) {
         String head = this.extractMainHead(request);
         Pattern pattern = Pattern.compile("(^|\\s)+([^\\s]+)");
@@ -58,8 +58,8 @@ public class Commons {
         String head = this.extractMainHead(request);
         Pattern pattern = Pattern.compile("(^|\\s)+([^\\s]+)");
         Matcher matcher = pattern.matcher(head);
-        if (matcher.find(3)) {
-            return matcher.group(2);
+        if (matcher.find(4)) {
+            return matcher.group(2).trim();
         }
         return "";
     }
@@ -76,8 +76,11 @@ public class Commons {
 
     //    Common for both request and response
     public String getHttpContent(String request) {
-        String[] stspl = request.split("(?<=\\n)(\\n)", 1);
-        System.err.println(stspl);
+        String[] stspl = request.split("(?<=\\n)(\\n)", 2);
+        int len = stspl.length;
+        if (len == 1) {
+            return "";
+        }
         return stspl[1];
     }
 
@@ -88,7 +91,7 @@ public class Commons {
         Map<String, String> map = new HashMap<>();
         while (matcher.find()) {
             String head = matcher.group(0);
-            String[] headSpl = head.split(": ", 1);
+            String[] headSpl = head.split(":", 2);
             map.put(headSpl[0], headSpl[1]);
         }
         return map;
