@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import org.sarabit.utils.Commons;
 
 /**
  *
@@ -21,35 +22,23 @@ public class Request {
     private String method;
     private String path;
     private String protocol;
-    private Map<String, String> additionalVars = new HashMap<>();
+    private Map<String, String> headers = new HashMap<>();
+    private String request = "";
 
     public Request(InputStream inputStream) throws IOException {
         InputStreamReader inStreamReader = new InputStreamReader(inputStream);
         BufferedReader inBufferedReader = new BufferedReader(inStreamReader);
-        String line;
-        String backHost = this.getBackHost().get("host");
-        String backPort = this.getBackHost().get("port");
-        int lineon = 1;
-        while ((line = inBufferedReader.readLine()) != null) {
-            if (line.length() > 0) {
-                this.readRequestLine(line, lineon);
-            } else {
-                break;
-            }
-            lineon++;
-        }
+        Commons common = new Commons();
+        String request = common.BufferReaderToString(inBufferedReader);
+        this.request = request;
+        this.setMethod(common.extractRequestMethod(request));
+        this.setPath(common.extractRequestPath(request));
+        this.setProtocol(common.extractRequestProtocol(request));
+        this.headers = common.getHeaders(request);
     }
 
-    private void readRequestLine(String line, int linenumber) {
-        if (linenumber == 1) {
-            String[] lineone = line.split(" ", 3);
-            this.setMethod(lineone[0].trim());
-            this.setPath(lineone[1].trim());
-            this.setProtocol(lineone[2].trim());
-        } else {
-            String[] otlines = line.split(":", 2);
-            additionalVars.put(otlines[0].trim(), otlines[1].trim());
-        }
+    public String getRequest() {
+        return this.request;
     }
 
     public String getMethod() {
@@ -75,12 +64,4 @@ public class Request {
     private void setProtocol(String protocol) {
         this.protocol = protocol;
     }
-
-    private Map<String, String> getBackHost() {
-        Map<String, String> map = new HashMap<>();
-        map.put("host", "bjsint.com");
-        map.put("port", "80");
-        return map;
-    }
-
 }

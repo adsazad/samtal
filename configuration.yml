@@ -2,5 +2,14 @@ nodename: arashdeep
 port: 8000
 proxies: 
  Us: 
-  host: "asiatradedirectory.com"
-  port: 80
+  host: "bjsint.com"
+  port: 443
+  secure: true
+ uk: 
+  host: "pjinds.com"
+  port: 443
+  secure: true  
+ japan: 
+  host: "ads.in"
+  port: 443
+  secure: true  

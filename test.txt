@@ -1,0 +1,26 @@
+HTTP/1.1 302 Found
+X-Robots-Tag: noindex
+X-Debug-Token: 8fbcc2
+Server: Apache/2.4.46 (cPanel) OpenSSL/1.1.1k mod_bwlimited/1.4
+Cache-Control: max-age=0, private, must-revalidate, max-age=0, must-revalidate, private
+Connection: close
+Set-Cookie: sf_redirect=%7B%22token%22%3A%228fbcc2%22%2C%22route%22%3A%22cart_add%22%2C%22method%22%3A%22GET%22%2C%22controller%22%3A%7B%22class%22%3A%22App%5C%5CController%5C%5CCartController%22%2C%22method%22%3A%22add%22%2C%22file%22%3A%22%5C%2Fhome%5C%2Fdemoshoppingsara%5C%2Fpublic_html%5C%2Fsrc%5C%2FController%5C%2FCartController.php%22%2C%22line%22%3A35%7D%2C%22status_code%22%3A302%2C%22status_text%22%3A%22Found%22%7D; path=/; httponly; samesite=lax
+Expires: Tue, 04 May 2021 05:40:18 GMT
+Date: Tue, 04 May 2021 05:40:18 GMT
+X-Debug-Token-Link: http://demo.shopping.sarabit.com/_profiler/8fbcc2
+Location: /cart
+Content-Type: text/html; charset=UTF-8
+
+10a
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="refresh" content="0;url='/cart'" />
+        <title>Redirecting to /cart</title>
+    </head>
+    <body>
+        Redirecting to <a href="/cart">/cart</a>.
+    </body>
+</html>
+0

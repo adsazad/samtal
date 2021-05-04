@@ -13,6 +13,7 @@ public class Proxy {
 
     public String host;
     public int port;
+    public boolean secure;
 
     public String getHost() {
         return this.host;
@@ -20,6 +21,10 @@ public class Proxy {
 
     public int getPort() {
         return this.port;
+    }
+
+    public boolean getSecure() {
+        return this.secure;
     }
 
 }

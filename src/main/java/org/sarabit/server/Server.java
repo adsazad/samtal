@@ -13,6 +13,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.sarabit.loader.Configuration;
@@ -37,12 +40,21 @@ public class Server implements Runnable {
 
     public void run() {
         try {
-
+            int i = 1;
             while (true) {
+
                 Socket s = serverSocket.accept();
+                System.err.println(i);
+                i++;
                 Request request = new Request(s.getInputStream());
-                System.out.println(request.getMethod());
-//                RequestReader request = new RequestReader(s.getInputStream(), s.getOutputStream());
+                s.close();
+//                RequestReader rr = new RequestReader(s.getInputStream(), s.getOutputStream());
+//                Runnable requestHandler = new RequestHandler(request, s);
+//                ExecutorService execs = Executors.newFixedThreadPool(5);
+//                execs.execute(requestHandler);
+//                System.out.println(requestHandler.sendRequest());
+//                System.out.println(request.getRequest());
+//                System.out.println(request.getMethod());
             }
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);

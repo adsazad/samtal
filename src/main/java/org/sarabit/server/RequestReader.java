@@ -29,8 +29,7 @@ public class RequestReader {
         String line;
         String backHost = this.getBackHost().get("host");
         String backPort = this.getBackHost().get("port");
-        CustomSocket cs = new CustomSocket();
-        Socket s = cs.getSocket(backHost);
+        Socket s = new Socket(backHost, 80);
         PrintWriter pw = new PrintWriter(s.getOutputStream());
 //        s.startHandshake();
 //        String request = "";
@@ -57,8 +56,8 @@ public class RequestReader {
         String line2 = "";
         PrintWriter pw2 = new PrintWriter(outputStream);
         while ((line2 = reader.readLine()) != null) {
-                System.out.println(line2);
-                pw2.println(line2);
+            System.out.println(line2);
+            pw2.println(line2);
 //                line2 = reader.readLine();
         }
         pw2.println("");
