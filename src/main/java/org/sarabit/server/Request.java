@@ -48,15 +48,16 @@ public class Request {
             if (key.equals("Host")) {
                 val = "bjsint.com";
             }
-//            if (!key.equals("Transfer-Encoding")) {
+            if (!key.equals("Transfer-Encoding")) {
                 sb.append(key + ": " + val + "\r\n");
-//            }
+            }
         }
         if (this.getContent().isEmpty()) {
             sb.append("\r\n");
             sb.append(this.getContent());
         }
         sb.append("\r\n");
+        System.err.println(sb.toString());
         return sb.toString();
     }
 

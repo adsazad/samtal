@@ -6,6 +6,7 @@
 package org.sarabit.utils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,16 +40,22 @@ public class Commons {
         StringBuffer sb = new StringBuffer();
         DataInputStream din = new DataInputStream(is);
         int i;
-        
         while ((i = din.read()) != -1) {
-//            if (!is.ready()) {
-//                break;
-//            }
             char c = (char) i;
             sb.append(c);
-
         }
-//        bi.close();
+        return sb.toString();
+    }
+
+    public String unchunk(byte[] byliet) throws IOException {
+        ByteArrayInputStream bain = new ByteArrayInputStream(byliet);
+        ChunkedInputStream cis = new ChunkedInputStream(bain);
+        StringBuffer sb = new StringBuffer();
+        int i;
+        while ((i = cis.read()) != -1) {
+            char c = (char) i;
+            sb.append(c);
+        }
         return sb.toString();
     }
 

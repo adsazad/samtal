@@ -37,7 +37,7 @@ public class Response {
         this.statusCode = Integer.parseInt(common.extractResponseCode(this.response));
         this.status = common.extractResponseStatus(this.response);
         this.header = common.getHeaders(this.response);
-        this.content = common.getHttpContent(this.response);
+        this.content = common.unchunk(common.getHttpContent(this.response).getBytes());
     }
 
     public String getContent() {
