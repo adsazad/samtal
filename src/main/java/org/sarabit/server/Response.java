@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import org.sarabit.utils.Commons;
 
 /**
  *
@@ -23,69 +24,53 @@ public class Response {
     private String status;
     private String content = "";
     private String headerString = "";
+    private String response;
+    private String contentType;
     private Map<String, String> header = new HashMap<>();
 
     public Response(InputStream inputStream) throws IOException {
         InputStreamReader inStreamReader = new InputStreamReader(inputStream);
         BufferedReader inBufferedReader = new BufferedReader(inStreamReader);
-        String line = "";
-        int lineon = 1;
-        boolean isReadContent = false;
-        while ((line = inBufferedReader.readLine()) != null) {
-            if (isReadContent == true) {
-                if (line.length() > 0) {
-                    this.content = this.content + line + "\r\n";
-                }
-            } else {
-                if (line.length() > 0) {
-                    this.readRequestLine(line, lineon);
-                } else {
-                    isReadContent = true;
-                    if (line.length() > 0) {
-                        this.content = this.content + line + "\r\n";
-                    }
-                }
-            }
-            lineon++;
-        }
-    }
-
-    private void readRequestLine(String line, int linenumber) {
-        if (linenumber == 1) {
-            String[] lineone = line.split(" ", 2);
-            this.protocol = lineone[0];
-            this.status = lineone[1];
-            String[] statusAr = status.split(" ");
-            this.statusCode = Integer.parseInt(statusAr[0]);
-        } else {
-            String[] otlines = line.split(":", 2);
-            header.put(otlines[0].trim(), otlines[1].trim());
-        }
-        this.headerString = this.headerString + line + "\r\n";
-    }
-
-    public Map<String, String> getHeaders() {
-        return this.header;
+        Commons common = new Commons();
+        this.response = common.InputStreamToString(inputStream);
+        this.protocol = common.extractResponseProtocol(this.response);
+        this.statusCode = Integer.parseInt(common.extractResponseCode(this.response));
+        this.status = common.extractResponseStatus(this.response);
+        this.header = common.getHeaders(this.response);
+        this.content = common.getHttpContent(this.response);
     }
 
     public String getContent() {
         return this.content.trim();
     }
 
-    public String getHeaderString() {
-        String header = this.getProtocol() + " " + this.getStatus() + "\r\n";
-        for (Map.Entry<String, String> headvars : this.header.entrySet()) {
-            String key = headvars.getKey();
-            String val = headvars.getValue();
+    public String getCompleteResponse() {
+        StringBuffer sb = new StringBuffer();
+        sb.append(this.getProtocol() + " " + this.getStatusCode() + " " + this.getStatus() + "\r\n");
+        for (Map.Entry<String, String> h : header.entrySet()) {
+            String key = h.getKey();
+            String val = h.getValue();
+            if (key.equals("Content-Type")) {
+                this.contentType = val;
+            }
+            if (key.equals("Content-Length")) {
+                val = Integer.toString(this.content.length());
+            }
             if (!key.equals("Transfer-Encoding")) {
-                header = header + key + ": " + val + "\r\n";
+                sb.append(key + ": " + val + "\r\n");
             }
         }
-        return header;
+        if (!this.getContent().isEmpty()) {
+            sb.append("\r\n");
+            sb.append(this.getContent());
+        }
+        sb.append("\r\n");
+
+        return sb.toString();
     }
 
-    public String getCompleteResponse() {
-        return this.getHeaderString()+"\r\n" + this.content;
+    public String getContentType() {
+        return this.contentType;
     }
 
     public String getProtocol() {
@@ -96,7 +81,7 @@ public class Response {
         return this.status;
     }
 
-    public Integer getStatusCodel() {
+    public Integer getStatusCode() {
         return this.statusCode;
     }
 

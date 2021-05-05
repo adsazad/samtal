@@ -6,7 +6,9 @@
 package org.sarabit.utils;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -29,10 +31,28 @@ public class Commons {
             sb.append(c);
 
         }
+//        bi.close();
         return sb.toString();
     }
 
-//    Only for Request
+    public String InputStreamToString(InputStream is) throws IOException {
+        StringBuffer sb = new StringBuffer();
+        DataInputStream din = new DataInputStream(is);
+        int i;
+        
+        while ((i = din.read()) != -1) {
+//            if (!is.ready()) {
+//                break;
+//            }
+            char c = (char) i;
+            sb.append(c);
+
+        }
+//        bi.close();
+        return sb.toString();
+    }
+
+    //    Only for Request
     public String extractRequestMethod(String request) {
         Pattern pattern = Pattern.compile("(?:^|(?:[.!?]\\s))(\\w+)");
         Matcher matcher = pattern.matcher(request);
@@ -42,29 +62,42 @@ public class Commons {
         return "";
     }
 
-//    Only for Request
+    //    Only for Request
     public String extractRequestPath(String request) {
         String head = this.extractMainHead(request);
-        Pattern pattern = Pattern.compile("(^|\\s)+([^\\s]+)");
-        Matcher matcher = pattern.matcher(head);
-        if (matcher.find(2)) {
-            return matcher.group(2);
-        }
-        return "";
+        String[] headspl = head.split(" ", 3);
+        return headspl[1];
     }
 
-//    Only for Request
+    //    Only for Request
     public String extractRequestProtocol(String request) {
         String head = this.extractMainHead(request);
-        Pattern pattern = Pattern.compile("(^|\\s)+([^\\s]+)");
-        Matcher matcher = pattern.matcher(head);
-        if (matcher.find(4)) {
-            return matcher.group(2).trim();
-        }
-        return "";
+        String[] headspl = head.split(" ", 3);
+        return headspl[2];
     }
 
-//    Common for both request and response
+    //    Only For Response
+    public String extractResponseProtocol(String request) {
+        String head = this.extractMainHead(request);
+        String[] headspl = head.split(" ", 3);
+        return headspl[0];
+    }
+
+    //    Only For Response
+    public String extractResponseCode(String request) {
+        String head = this.extractMainHead(request);
+        String[] headspl = head.split(" ", 3);
+        return headspl[1];
+    }
+
+    //    Only For Response
+    public String extractResponseStatus(String request) {
+        String head = this.extractMainHead(request);
+        String[] headspl = head.split(" ", 3);
+        return headspl[2];
+    }
+
+    //    Common for both request and response
     public String extractMainHead(String request) {
         Pattern pattern = Pattern.compile("(.+)");
         Matcher matcher = pattern.matcher(request);
@@ -76,7 +109,7 @@ public class Commons {
 
     //    Common for both request and response
     public String getHttpContent(String request) {
-        String[] stspl = request.split("(?<=\\n)(\\n)", 2);
+        String[] stspl = request.split("(?<=\r\n)(\r\n)", 2);
         int len = stspl.length;
         if (len == 1) {
             return "";
@@ -84,10 +117,19 @@ public class Commons {
         return stspl[1];
     }
 
+    public String getHttpHead(String request) {
+        String[] stspl = request.split("(?<=\r\n)(\r\n)", 2);
+        int len = stspl.length;
+        if (len == 1) {
+            return request;
+        }
+        return stspl[0];
+    }
+
     //    Common for both request and response
     public Map<String, String> getHeaders(String request) {
         Pattern pattern = Pattern.compile("([ -a-zA-z0-9])+: ([ -a-zA-z0-9])+");
-        Matcher matcher = pattern.matcher(request);
+        Matcher matcher = pattern.matcher(this.getHttpHead(request));
         Map<String, String> map = new HashMap<>();
         while (matcher.find()) {
             String head = matcher.group(0);

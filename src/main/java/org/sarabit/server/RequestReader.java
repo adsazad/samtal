@@ -40,7 +40,6 @@ public class RequestReader {
                 }
                 line = line + "\r\n";
                 pw.print(line);
-                System.err.println(line);
 //                request = request + line;
             } else {
                 break;

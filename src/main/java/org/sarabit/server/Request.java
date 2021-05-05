@@ -32,7 +32,6 @@ public class Request {
         Commons common = new Commons();
         String request = common.BufferReaderToString(inBufferedReader);
         this.request = request;
-        System.err.println(request);
         this.setMethod(common.extractRequestMethod(request));
         this.setPath(common.extractRequestPath(request));
         this.setProtocol(common.extractRequestProtocol(request));
@@ -46,10 +45,12 @@ public class Request {
         for (Map.Entry<String, String> h : headers.entrySet()) {
             String key = h.getKey();
             String val = h.getValue();
-            if (key == "Host") {
-                val = "demo.shopping.sarabit.com";
+            if (key.equals("Host")) {
+                val = "bjsint.com";
             }
-            sb.append(key + ": " + val + "\r\n");
+//            if (!key.equals("Transfer-Encoding")) {
+                sb.append(key + ": " + val + "\r\n");
+//            }
         }
         if (this.getContent().isEmpty()) {
             sb.append("\r\n");

@@ -44,11 +44,9 @@ public class Server implements Runnable {
             while (true) {
 
                 Socket s = serverSocket.accept();
-                System.err.println(i);
                 i++;
-                Request request = new Request(s.getInputStream());
 //                RequestReader rr = new RequestReader(s.getInputStream(), s.getOutputStream());
-                Runnable requestHandler = new RequestHandler(request, s);
+                Runnable requestHandler = new RequestHandler(s);
                 ExecutorService execs = Executors.newFixedThreadPool(5);
                 execs.execute(requestHandler);
 //                System.out.println(requestHandler.sendRequest());
